@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 import { FiSearch } from 'react-icons/fi'
 
-type HeaderProps = {}
+interface HeaderProps  {}
 
 const Header = () => {
   const cart = useSelector((state:any) => state.cart.cart)
