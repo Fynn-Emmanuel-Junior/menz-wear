@@ -8,7 +8,7 @@ type LayoutProps = {
 
 const Layout:React.FC<LayoutProps>= ({children}) => { 
   return (
-    <div className='font-poppins relative'>
+    <div className='font-poppins'>
         <p className='bg-black text-white h-[40px] text-center pt-[10px] font-sans'>Limited Time Only : Seasonal Clearance Sale</p>
         <div className='sticky top-0 bg-white'>
 			<Header />
@@ -16,8 +16,7 @@ const Layout:React.FC<LayoutProps>= ({children}) => {
 				<Navbar />
 			</div>
 			<hr />
-          
-        </div>
+        </div> 
         <div>
             {children}
         </div>
