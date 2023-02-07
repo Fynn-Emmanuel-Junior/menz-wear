@@ -1,8 +1,13 @@
 import React from 'react'
+import Layout from '../../../components/Layouts/Layout'
 
-const SignUp = () => {
+interface SignUpProps {}
+
+const SignUp:React.FC<SignUpProps> = () => {
   return (
-    <div>SignUp</div>
+    <Layout>
+    	SignUp
+    </Layout>
   )
 }
 

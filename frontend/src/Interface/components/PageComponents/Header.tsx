@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 import { FiSearch } from 'react-icons/fi'
 
-type HeaderProps = {}
+interface HeaderProps  {}
 
 const Header = () => {
   const cart = useSelector((state:any) => state.cart.cart)
@@ -12,14 +12,16 @@ const Header = () => {
     <div className='mt-[10px]'>
             <div className='ml-[40%] text-center flex justify-between items-center'>
                 <div>
-                    <h1 className='text-center'>menz wear</h1>
-                    <p className='text-center text-xs text-slate-600'>MENS WEAR EXPERTS || GH ONLY</p>
+                    <Link to={'/'} className='text-slate-500 hover:text-slate-500'>
+                        <h1 className='text-center'>menz wear</h1>
+                        <p className='text-center text-xs text-slate-600'>MENS WEAR EXPERTS || GH ONLY</p>
+                    </Link>
                 </div>
                 <div className='w-[350px]'>
                     <ul className='flex justify-between items-center mr-10 text-sm font-light'>
                         <li className='flex'>
-                            <Link to={''} className='text-slate-700 hover:text-black font-light'>Sign in / </Link>
-                            <Link to={''} className='text-slate-700 hover:text-black font-light'>Register</Link>
+                            <Link to={'/signin'} className='text-slate-700 hover:text-black font-light'>Sign in / </Link>
+                            <Link to={'/signup'} className='text-slate-700 hover:text-black font-light'>Register</Link>
                         </li>
                         <li>
                             <Link to={''} className='flex text-slate-700 hover:text-black font-light'>
