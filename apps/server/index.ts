@@ -4,8 +4,9 @@ import mongoose from 'mongoose'
 import cookieParser from 'cookie-parser'
 import dotenv from 'dotenv'
 dotenv.config()
+import usersRoutes from './routes/usersRoutes'
 
-const database = process.env.DATABASE_URI   
+const database = process.env.DATABASE_URI    
 
 const app = express()
 
@@ -18,6 +19,7 @@ app.use(cors())
 app.use(cookieParser())
 
 //Routes
+app.use('/users',usersRoutes)
  
 
 

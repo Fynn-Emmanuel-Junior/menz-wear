@@ -18,6 +18,7 @@ const mongoose_1 = __importDefault(require("mongoose"));
 const cookie_parser_1 = __importDefault(require("cookie-parser"));
 const dotenv_1 = __importDefault(require("dotenv"));
 dotenv_1.default.config();
+const usersRoutes_1 = __importDefault(require("./routes/usersRoutes"));
 const database = process.env.DATABASE_URI;
 const app = (0, express_1.default)();
 const PORT = process.env.PORT || 3500;
@@ -27,6 +28,7 @@ app.use(express_1.default.urlencoded({ extended: true }));
 app.use((0, cors_1.default)());
 app.use((0, cookie_parser_1.default)());
 //Routes
+app.use('/users', usersRoutes_1.default);
 app.listen(PORT, () => __awaiter(void 0, void 0, void 0, function* () {
     yield mongoose_1.default.connect(database)
         .then(() => console.log(`server running on port ${PORT}`))
