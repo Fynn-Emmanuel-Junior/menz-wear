@@ -1,6 +1,6 @@
 import UserModel from '../models/User'
 import jwt from 'jsonwebtoken'
-import bcrypt, { genSalt } from 'bcryptjs'
+import bcrypt from 'bcryptjs'
 import { Response,Request } from 'express'
 import { userSignupValidation,userLoginValidation } from '../validations/UserValidations'
 
@@ -28,8 +28,8 @@ const registerController = async (req:Request,res:Response) => {
             .json(user)
             .json({message: 'user login successful'})
 
-    } catch (err) {
-        res.status(400).json({message: `error in creating user: ${err.message}`})
+    } catch (err: unknown) {
+        if(err instanceof Error) return res.status(400).json({message: `error in creating user: ${err.message}`})
     }
 }
 

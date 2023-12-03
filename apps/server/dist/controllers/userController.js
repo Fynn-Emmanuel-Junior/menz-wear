@@ -49,7 +49,8 @@ const registerController = (req, res) => __awaiter(void 0, void 0, void 0, funct
             .json({ message: 'user login successful' });
     }
     catch (err) {
-        res.status(400).json({ message: `error in creating user: ${err.message}` });
+        if (err instanceof Error)
+            return res.status(400).json({ message: `error in creating user: ${err.message}` });
     }
 });
 exports.registerController = registerController;
