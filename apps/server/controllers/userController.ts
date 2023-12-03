@@ -43,15 +43,15 @@ const loginController = async (req:Request,res:Response) => {
 
     if(!req.body.email) return res.status(404).json({message: `No user found `})
 
-    const user = await UserModel.findOne({email})
+    const user: object | null = await UserModel.findOne({email})
 
     const match = await bcrypt.compare(password,user.password)
 
     if(match) {
         const accesstoken = jwt.sign(
-            {"userId": user._id},
-            process.env.ACCESS_TOKEN_SECRET
-        )
+            {"userId": user?._id},
+            process.env.ACCESS_TOKEN_SECRET | null
+        ) 
 
         res.cookie(
             'jwt',
@@ -64,9 +64,9 @@ const loginController = async (req:Request,res:Response) => {
         )
 
         res.status(200).json({
-            _id: user._id,
-            username: user.username,
-            email: user.username
+            _id: user?._id,
+            username: user?.username,
+            email: user?.email
         })
 
     } else {

@@ -64,16 +64,16 @@ const loginController = (req, res) => __awaiter(void 0, void 0, void 0, function
     const user = yield User_1.default.findOne({ email });
     const match = yield bcryptjs_1.default.compare(password, user.password);
     if (match) {
-        const accesstoken = jsonwebtoken_1.default.sign({ "userId": user._id }, process.env.ACCESS_TOKEN_SECRET);
+        const accesstoken = jsonwebtoken_1.default.sign({ "userId": user === null || user === void 0 ? void 0 : user._id }, process.env.ACCESS_TOKEN_SECRET | null);
         res.cookie('jwt', accesstoken, {
             httpOnly: true,
             sameSite: 'none',
             secure: true
         });
         res.status(200).json({
-            _id: user._id,
-            username: user.username,
-            email: user.username
+            _id: user === null || user === void 0 ? void 0 : user._id,
+            username: user === null || user === void 0 ? void 0 : user.username,
+            email: user === null || user === void 0 ? void 0 : user.email
         });
     }
     else {
