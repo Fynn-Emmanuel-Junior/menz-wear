@@ -50,7 +50,7 @@ const loginController = async (req:Request,res:Response) => {
     if(match) {
         const accesstoken = jwt.sign(
             {"userId": user?._id},
-            process.env.ACCESS_TOKEN_SECRET | null
+            process.env.ACCESS_TOKEN_SECRET
         ) 
 
         res.cookie(
@@ -98,7 +98,7 @@ const updateController = async (req:Request,res:Response) => {
             } 
         }, {new: true})
 
-        const {password, ...rest} = user
+        const {password: pass, ...rest} = user
         res.status(200).json(rest)
     } catch(err) {
         res.status(400).json('error in updating user')

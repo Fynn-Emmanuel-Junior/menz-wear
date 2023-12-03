@@ -64,7 +64,7 @@ const loginController = (req, res) => __awaiter(void 0, void 0, void 0, function
     const user = yield User_1.default.findOne({ email });
     const match = yield bcryptjs_1.default.compare(password, user.password);
     if (match) {
-        const accesstoken = jsonwebtoken_1.default.sign({ "userId": user === null || user === void 0 ? void 0 : user._id }, process.env.ACCESS_TOKEN_SECRET | null);
+        const accesstoken = jsonwebtoken_1.default.sign({ "userId": user === null || user === void 0 ? void 0 : user._id }, process.env.ACCESS_TOKEN_SECRET);
         res.cookie('jwt', accesstoken, {
             httpOnly: true,
             sameSite: 'none',
@@ -104,7 +104,7 @@ const updateController = (req, res) => __awaiter(void 0, void 0, void 0, functio
                 password: req.body.password
             }
         }, { new: true });
-        const { password } = user, rest = __rest(user, ["password"]);
+        const { password: pass } = user, rest = __rest(user, ["password"]);
         res.status(200).json(rest);
     }
     catch (err) {
