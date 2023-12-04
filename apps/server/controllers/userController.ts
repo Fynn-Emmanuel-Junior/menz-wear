@@ -3,6 +3,7 @@ import jwt from 'jsonwebtoken'
 import bcrypt from 'bcryptjs'
 import { Response,Request } from 'express'
 import { userSignupValidation,userLoginValidation } from '../validations/UserValidations'
+import {ACCESS_TOKEN_SECRET} from '../index'
 
 const registerController = async (req:Request,res:Response) => {
     const {error} = userSignupValidation(req.body)
@@ -43,14 +44,14 @@ const loginController = async (req:Request,res:Response) => {
 
     if(!req.body.email) return res.status(404).json({message: `No user found `})
 
-    const user: object | null = await UserModel.findOne({email})
+    const user:any  = await UserModel.findOne({email})
 
-    const match = await bcrypt.compare(password,user.password)
+    const match = await bcrypt.compare(password, user.password || '')
 
     if(match) {
         const accesstoken = jwt.sign(
-            {"userId": user?._id},
-            process.env.ACCESS_TOKEN_SECRET
+            {"userId": user._id},
+            ACCESS_TOKEN_SECRET
         ) 
 
         res.cookie(
@@ -64,9 +65,9 @@ const loginController = async (req:Request,res:Response) => {
         )
 
         res.status(200).json({
-            _id: user?._id,
-            username: user?.username,
-            email: user?.email
+            _id: user._id,
+            username: user.username,
+            email: user.email
         })
 
     } else {
@@ -83,14 +84,31 @@ const logoutController = async (req:Request,res:Response) => {
     }
 }
 
+interface User {
+    _id: string,
+    username: string,
+    email: string,
+    password: string
+}
+
+declare global {
+    namespace Express {
+      interface Request {
+        user: User | '';
+        updateUser: User | ''
+      }
+    }
+  }
+
 const updateController = async (req:Request,res:Response) => {
     try {
+        const user = req.user
         if(req.body.password) {
             const salt = await bcrypt.genSalt(10)
             req.body.password  = await bcrypt.hash(req.body.password,salt)
         }
 
-        const user = await UserModel.findByIdAndUpdate(req.body.id,{
+        const updateUser = await UserModel.findByIdAndUpdate(user._id,{
             $set: {
                 username: req.body.username,
                 email: req.body.email,
@@ -98,17 +116,38 @@ const updateController = async (req:Request,res:Response) => {
             } 
         }, {new: true})
 
-        const {password: pass, ...rest} = user
+        const {password , ...rest} = updateUser
         res.status(200).json(rest)
     } catch(err) {
         res.status(400).json('error in updating user')
     }
-
 } 
+
+const resetPasswordController = async(req:Request,res:Response) => {
+    try {
+        const {email,newpassword} = req.body
+
+        const user = await UserModel.findOne({email})
+    
+        if(!user) return res.status(404).json({message: 'no user found'})
+        
+        const salt = await bcrypt.genSalt(10)
+        const hashedpassword = await bcrypt.hash(newpassword,salt)
+
+        user.password = hashedpassword
+        await user.save()
+
+        return res.status(200).json({message: 'password reset succesful'})
+    
+    } catch(err) {
+        res.status(400).json('password reset unsuccessful')
+    }  
+}
 
 export {
     registerController,
     loginController,
     logoutController,
     updateController,
+    resetPasswordController
 }

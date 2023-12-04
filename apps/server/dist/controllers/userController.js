@@ -23,11 +23,12 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.updateController = exports.logoutController = exports.loginController = exports.registerController = void 0;
+exports.resetPasswordController = exports.updateController = exports.logoutController = exports.loginController = exports.registerController = void 0;
 const User_1 = __importDefault(require("../models/User"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const bcryptjs_1 = __importDefault(require("bcryptjs"));
 const UserValidations_1 = require("../validations/UserValidations");
+const index_1 = require("../index");
 const registerController = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { error } = (0, UserValidations_1.userSignupValidation)(req.body);
     if (error)
@@ -62,18 +63,18 @@ const loginController = (req, res) => __awaiter(void 0, void 0, void 0, function
     if (!req.body.email)
         return res.status(404).json({ message: `No user found ` });
     const user = yield User_1.default.findOne({ email });
-    const match = yield bcryptjs_1.default.compare(password, user.password);
+    const match = yield bcryptjs_1.default.compare(password, user.password || '');
     if (match) {
-        const accesstoken = jsonwebtoken_1.default.sign({ "userId": user === null || user === void 0 ? void 0 : user._id }, process.env.ACCESS_TOKEN_SECRET);
+        const accesstoken = jsonwebtoken_1.default.sign({ "userId": user._id }, index_1.ACCESS_TOKEN_SECRET);
         res.cookie('jwt', accesstoken, {
             httpOnly: true,
             sameSite: 'none',
             secure: true
         });
         res.status(200).json({
-            _id: user === null || user === void 0 ? void 0 : user._id,
-            username: user === null || user === void 0 ? void 0 : user.username,
-            email: user === null || user === void 0 ? void 0 : user.email
+            _id: user._id,
+            username: user.username,
+            email: user.email
         });
     }
     else {
@@ -93,18 +94,19 @@ const logoutController = (req, res) => __awaiter(void 0, void 0, void 0, functio
 exports.logoutController = logoutController;
 const updateController = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
+        const user = req.user;
         if (req.body.password) {
             const salt = yield bcryptjs_1.default.genSalt(10);
             req.body.password = yield bcryptjs_1.default.hash(req.body.password, salt);
         }
-        const user = yield User_1.default.findByIdAndUpdate(req.body.id, {
+        const updateUser = yield User_1.default.findByIdAndUpdate(user._id, {
             $set: {
                 username: req.body.username,
                 email: req.body.email,
                 password: req.body.password
             }
         }, { new: true });
-        const { password: pass } = user, rest = __rest(user, ["password"]);
+        const { password } = updateUser, rest = __rest(updateUser, ["password"]);
         res.status(200).json(rest);
     }
     catch (err) {
@@ -112,3 +114,20 @@ const updateController = (req, res) => __awaiter(void 0, void 0, void 0, functio
     }
 });
 exports.updateController = updateController;
+const resetPasswordController = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const { email, newpassword } = req.body;
+        const user = yield User_1.default.findOne({ email });
+        if (!user)
+            return res.status(404).json({ message: 'no user found' });
+        const salt = yield bcryptjs_1.default.genSalt(10);
+        const hashedpassword = yield bcryptjs_1.default.hash(newpassword, salt);
+        user.password = hashedpassword;
+        yield user.save();
+        return res.status(200).json({ message: 'password reset succesful' });
+    }
+    catch (err) {
+        res.status(400).json('password reset unsuccessful');
+    }
+});
+exports.resetPasswordController = resetPasswordController;

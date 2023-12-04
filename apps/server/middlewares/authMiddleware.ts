@@ -2,6 +2,9 @@ import jwt from 'jsonwebtoken'
 import asyncHandler from 'express-async-handler'
 import UserModel from '../models/User'
 
+interface TOKEN {
+    accesstoken: string | null
+}
 export const authMiddleware = asyncHandler(async(req,res,next) => {
     let token ;
 

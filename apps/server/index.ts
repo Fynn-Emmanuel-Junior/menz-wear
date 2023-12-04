@@ -1,4 +1,4 @@
-import express,{Request,Response} from 'express'
+import express,{Request,Response,Application} from 'express'
 import cors from 'cors'
 import mongoose from 'mongoose'
 import cookieParser from 'cookie-parser'
@@ -6,9 +6,13 @@ import dotenv from 'dotenv'
 dotenv.config()
 import usersRoutes from './routes/usersRoutes'
 
-const database = process.env.DATABASE_URI    
+const database: string = process.env.DATABASE_URI  as string 
 
-const app = express()
+//ENV 
+
+export const ACCESS_TOKEN_SECRET: string = process.env.ACCESS_TOKEN_SECRET as string
+
+const app: Application = express()
 
 const PORT = process.env.PORT ||  3500;
 
@@ -21,7 +25,6 @@ app.use(cookieParser())
 //Routes
 app.use('/users',usersRoutes)
  
-
 
 app.listen(PORT, async () => {
     await mongoose.connect(database)
