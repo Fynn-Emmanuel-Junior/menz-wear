@@ -12,7 +12,7 @@ const registerController = async (req:Request,res:Response) => {
     const {username,email,password} = req.body
 
     const checkIfEmailExists = await UserModel.findOne({email})
-    if(checkIfEmailExists) return res.status(400).json('User already exists')
+    if(checkIfEmailExists) return res.status(409).json('User already exists')
 
     const salt = await bcrypt.genSalt(10)
 
