@@ -78,7 +78,7 @@ const loginController = async (req:Request,res:Response) => {
 const logoutController = async (req:Request,res:Response) => {
     try {
         res.clearCookie('jwt')
-        res.status(401).json({message: 'user has been logout'})
+        res.status(201).json({message: 'user has been logout'})
     } catch(err) {
         res.status(400).json({message: 'error in logging out user'})
     }

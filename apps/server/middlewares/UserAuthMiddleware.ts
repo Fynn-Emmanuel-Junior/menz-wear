@@ -3,15 +3,13 @@ import jwt from 'jsonwebtoken'
 import asyncHandler from 'express-async-handler'
 import UserModel from '../models/User'
 
-const accesstoken : string = process.env.ACCESS_TOKEN_SECRET as string
-
-export const authMiddleware = asyncHandler(async(req,res,next) => {
+export const UserAuthMiddleware = asyncHandler(async(req,res,next) => {
     let token ;
     token = req.cookies.jwt
 
     if(token) {
         try {
-            const decoded = jwt.verify(token,accesstoken)
+            const decoded = jwt.verify(token,ACCESS_TOKEN_SECRET)
 
             req.user = await UserModel.findById(decoded.userId)
 

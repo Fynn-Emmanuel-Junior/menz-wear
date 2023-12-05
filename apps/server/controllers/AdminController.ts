@@ -3,6 +3,7 @@ import AdminModel from '../models/Admin'
 import bcrypt from 'bcryptjs'
 import jwt from 'jsonwebtoken'
 import { Request,Response } from 'express';
+import { ACCESS_TOKEN_SECRET } from '../index';
 
 
 export const registerController = async (req:Request,res:Response) => {
@@ -32,14 +33,69 @@ export const registerController = async (req:Request,res:Response) => {
     }
 }
 
-export const loginController = async () => {
+export const loginController = async (req:Request,res:Response) => {
+    const {error} = AdminLoginValidation(req.body)
+    if(error) return res.status(400).json({message: error.message})
+
+    const {email,password} = req.body
+
+    const admin:any = await AdminModel.findOne({email})
+
+    const matchpassword = await bcrypt.compare(password, admin.password || '')
+
+    if(matchpassword) {
+        try {
+            const accesstoken = jwt.sign(
+                {"adminId": admin._id},
+                ACCESS_TOKEN_SECRET
+            )
+
+            res.cookie(
+                'jwt',
+                accesstoken, 
+                {
+                    httpOnly: true,
+                    sameSite: 'none',
+                    secure: true
+                }
+            )
+
+            res.status(200).json('login successful')
+        } catch(err: unknown) {
+            if(err instanceof Error) return res.status(400).json({message: err.message})
+        }
+    } else {
+        res.status(401).json('No admin found')
+    }
     
 }
 
-export const logoutController = async () => {
-    
+export const logoutController = async (req:Request,res:Response) => {
+    try {
+        res.clearCookie('jwt')
+        res.status(200).json('admin logout')
+    } catch(err: unknown) {
+        if(err instanceof Error) return res.status(400).json({message: err.message})
+    }
 }
 
-export const updateController = async () => {
-    
+export const updateController = async (req:Request,res:Response) => {
+    try {
+        if(req.body.password) {
+            const salt = await bcrypt.genSalt(10)
+            req.body.password = await bcrypt.hash(req.body.passowrd,salt)
+        }
+
+        const updatedAdmin = await AdminModel.findByIdAndUpdate(admin._id,{
+            $set: {
+                username: req.body.username,
+                email: req.body.email,
+                password: req.body.password
+            }
+        }, {new: true})
+
+        res.status(200).json('Admin updated successfully')
+    } catch(err: Unknown) {
+        if(err instanceof Error) return res.status(400).json({message: err.message})
+    }
 }
