@@ -80,3 +80,19 @@ export const deleteProduct = async (req: Request, res: Response) => {
         }
     }
 }
+
+export const getCategoryProducts = async (req:Request,res:Response) => {
+    const {name} = req.body
+    
+    try {
+        const products = await ProductModel.find({category: name})
+        res.status(200).json(products)
+    } catch(err: unknown) {
+        if(err instanceof Error) {
+            res.status(404).json({
+                status: false,
+                message: err.message
+            })
+        }
+    }
+}

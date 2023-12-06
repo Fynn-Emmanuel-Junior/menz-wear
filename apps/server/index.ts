@@ -5,6 +5,7 @@ import cookieParser from 'cookie-parser'
 import dotenv from 'dotenv'
 dotenv.config()
 import usersRoutes from './routes/usersRoutes'
+import productsRoutes from './routes/productRoutes'
 
 const database: string = process.env.DATABASE_URI  as string 
 
@@ -25,6 +26,7 @@ app.use(cookieParser())
 
 //Routes
 app.use('/users',usersRoutes)
+app.use('/products',productsRoutes)
  
 
 app.listen(PORT, async () => {

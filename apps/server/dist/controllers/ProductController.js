@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteProduct = exports.getProduct = exports.getAllProducts = exports.updateProduct = exports.createProduct = void 0;
+exports.getCategoryProducts = exports.deleteProduct = exports.getProduct = exports.getAllProducts = exports.updateProduct = exports.createProduct = void 0;
 const Product_1 = __importDefault(require("../models/Product"));
 const createProduct = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
@@ -92,3 +92,19 @@ const deleteProduct = (req, res) => __awaiter(void 0, void 0, void 0, function* 
     }
 });
 exports.deleteProduct = deleteProduct;
+const getCategoryProducts = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { name } = req.body;
+    try {
+        const products = yield Product_1.default.find({ category: name });
+        res.status(200).json(products);
+    }
+    catch (err) {
+        if (err instanceof Error) {
+            res.status(404).json({
+                status: false,
+                message: err.message
+            });
+        }
+    }
+});
+exports.getCategoryProducts = getCategoryProducts;
