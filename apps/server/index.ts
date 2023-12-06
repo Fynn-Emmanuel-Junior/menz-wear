@@ -11,6 +11,7 @@ const database: string = process.env.DATABASE_URI  as string
 //ENV 
 
 export const ACCESS_TOKEN_SECRET: string = process.env.ACCESS_TOKEN_SECRET as string
+export const ADMIN_TOKEN_SECRET: string = process.env.ADMIN_TOKEN_SECRET as string
 
 const app: Application = express()
 

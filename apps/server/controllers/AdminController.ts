@@ -3,7 +3,7 @@ import AdminModel from '../models/Admin'
 import bcrypt from 'bcryptjs'
 import jwt from 'jsonwebtoken'
 import { Request,Response } from 'express';
-import { ACCESS_TOKEN_SECRET } from '../index';
+import { ADMIN_TOKEN_SECRET } from '../index';
 
 
 export const registerController = async (req:Request,res:Response) => {
@@ -47,10 +47,10 @@ export const loginController = async (req:Request,res:Response) => {
         try {
             const accesstoken = jwt.sign(
                 {"adminId": admin._id},
-                ACCESS_TOKEN_SECRET
+                ADMIN_TOKEN_SECRET
             )
 
-            res.cookie(
+            res.cookie( 
                 'jwt',
                 accesstoken, 
                 {
@@ -81,6 +81,8 @@ export const logoutController = async (req:Request,res:Response) => {
 
 export const updateController = async (req:Request,res:Response) => {
     try {
+
+        const admin = req.user
         if(req.body.password) {
             const salt = await bcrypt.genSalt(10)
             req.body.password = await bcrypt.hash(req.body.passowrd,salt)
@@ -95,7 +97,7 @@ export const updateController = async (req:Request,res:Response) => {
         }, {new: true})
 
         res.status(200).json('Admin updated successfully')
-    } catch(err: Unknown) {
+    } catch(err: unknown) {
         if(err instanceof Error) return res.status(400).json({message: err.message})
     }
 }

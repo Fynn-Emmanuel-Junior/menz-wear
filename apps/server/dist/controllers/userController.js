@@ -36,7 +36,7 @@ const registerController = (req, res) => __awaiter(void 0, void 0, void 0, funct
     const { username, email, password } = req.body;
     const checkIfEmailExists = yield User_1.default.findOne({ email });
     if (checkIfEmailExists)
-        return res.status(400).json('User already exists');
+        return res.status(409).json('User already exists');
     const salt = yield bcryptjs_1.default.genSalt(10);
     const hashedpassword = yield bcryptjs_1.default.hash(req.body.password, salt);
     try {
@@ -85,7 +85,7 @@ exports.loginController = loginController;
 const logoutController = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         res.clearCookie('jwt');
-        res.status(401).json({ message: 'user has been logout' });
+        res.status(201).json({ message: 'user has been logout' });
     }
     catch (err) {
         res.status(400).json({ message: 'error in logging out user' });
