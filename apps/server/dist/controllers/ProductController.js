@@ -93,9 +93,8 @@ const deleteProduct = (req, res) => __awaiter(void 0, void 0, void 0, function* 
 });
 exports.deleteProduct = deleteProduct;
 const getCategoryProducts = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { name } = req.body;
     try {
-        const products = yield Product_1.default.find({ category: name });
+        const products = yield Product_1.default.findById({ category: req.params.id });
         res.status(200).json(products);
     }
     catch (err) {

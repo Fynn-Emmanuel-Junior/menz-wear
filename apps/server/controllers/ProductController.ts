@@ -1,7 +1,7 @@
 import { Request,Response } from "express";
 import ProductModel from "../models/Product";
 
-export const createProduct = async (req:Request,res:Response) => {
+export const AddProduct = async (req:Request,res:Response) => {
     try {
         const newproduct = await ProductModel.create(req.body)
         res.status(200).json(newproduct)
@@ -81,11 +81,9 @@ export const deleteProduct = async (req: Request, res: Response) => {
     }
 }
 
-export const getCategoryProducts = async (req:Request,res:Response) => {
-    const {name} = req.body
-    
+export const getCategoryProducts = async (req:Request,res:Response) => {    
     try {
-        const products = await ProductModel.find({category: name})
+        const products = await ProductModel.find({category: req.params.id})
         res.status(200).json(products)
     } catch(err: unknown) {
         if(err instanceof Error) {

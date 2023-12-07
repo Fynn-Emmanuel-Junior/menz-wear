@@ -1,6 +1,6 @@
 import 
 { 
-    createProduct,
+    AddProduct,
     updateProduct,
     getAllProducts,
     deleteProduct, 
@@ -11,10 +11,10 @@ import { AdminAuthMiddleware } from '../middlewares/AdminAuthMiddleware';
 
 const router = express.Router();
 
-router.post('/create',createProduct)
+router.post('/create',AdminAuthMiddleware,AddProduct)
 router.get('/',AdminAuthMiddleware,getAllProducts)
-router.post('/update',AdminAuthMiddleware,updateProduct)
-router.delete('/delete', AdminAuthMiddleware,deleteProduct)
+router.post('/update:id',AdminAuthMiddleware,updateProduct)
+router.delete('/delete:id', AdminAuthMiddleware,deleteProduct)
 router.get('/category-products:id',AdminAuthMiddleware,getCategoryProducts)
 
 export default router
