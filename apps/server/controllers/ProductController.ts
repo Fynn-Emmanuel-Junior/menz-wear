@@ -24,7 +24,7 @@ export const updateProduct = async (req:Request, res:Response) => {
             req.body,
             {new: true}
         )
-
+        
         res.status(200).json({
             status: false,
             message: 'product updated',

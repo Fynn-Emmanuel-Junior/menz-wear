@@ -12,9 +12,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getCategoryProducts = exports.deleteProduct = exports.getProduct = exports.getAllProducts = exports.updateProduct = exports.createProduct = void 0;
+exports.getCategoryProducts = exports.deleteProduct = exports.getProduct = exports.getAllProducts = exports.updateProduct = exports.AddProduct = void 0;
 const Product_1 = __importDefault(require("../models/Product"));
-const createProduct = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+const AddProduct = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const newproduct = yield Product_1.default.create(req.body);
         res.status(200).json(newproduct);
@@ -28,7 +28,7 @@ const createProduct = (req, res) => __awaiter(void 0, void 0, void 0, function* 
         }
     }
 });
-exports.createProduct = createProduct;
+exports.AddProduct = AddProduct;
 const updateProduct = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const product = yield Product_1.default.findById(req.params.id);
     if (product) {
@@ -94,7 +94,7 @@ const deleteProduct = (req, res) => __awaiter(void 0, void 0, void 0, function* 
 exports.deleteProduct = deleteProduct;
 const getCategoryProducts = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const products = yield Product_1.default.findById({ category: req.params.id });
+        const products = yield Product_1.default.find({ category: req.params.id });
         res.status(200).json(products);
     }
     catch (err) {

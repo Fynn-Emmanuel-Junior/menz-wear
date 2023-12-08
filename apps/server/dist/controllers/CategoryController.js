@@ -12,9 +12,10 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteCategory = exports.updateCategory = exports.getAllCategory = exports.createCategory = void 0;
+exports.deleteCategory = exports.updateCategory = exports.getAllCategory = exports.AddCategory = void 0;
 const Category_1 = __importDefault(require("../models/Category"));
-const createCategory = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+const Product_1 = __importDefault(require("../models/Product"));
+const AddCategory = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const category = yield Category_1.default.create(req.body);
         res.status(200).json(category);
@@ -27,7 +28,7 @@ const createCategory = (req, res) => __awaiter(void 0, void 0, void 0, function*
         }
     }
 });
-exports.createCategory = createCategory;
+exports.AddCategory = AddCategory;
 const getAllCategory = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const categories = yield Category_1.default.find();
@@ -59,5 +60,15 @@ const updateCategory = (req, res) => __awaiter(void 0, void 0, void 0, function*
 });
 exports.updateCategory = updateCategory;
 const deleteCategory = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        yield Category_1.default.deleteOne({ category: req.params.id });
+        yield Product_1.default.findOneAndDelete({ category: req.params.id });
+        res.status(200).json('category deleted');
+    }
+    catch (err) {
+        if (err instanceof Error) {
+            res.status(400).json({ message: err.message });
+        }
+    }
 });
 exports.deleteCategory = deleteCategory;

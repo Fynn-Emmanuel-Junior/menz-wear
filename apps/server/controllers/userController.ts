@@ -22,7 +22,9 @@ const registerController = async (req:Request,res:Response) => {
         const  user = await UserModel.create({
             username: req.body.username,
             email: req.body.email,
-            password: hashedpassword
+            password: hashedpassword,
+            phoneNumber: req.body.phoneNumber,
+            shippingAddress: req.body.shippingAddress
         })
 
         res.status(200)
@@ -67,7 +69,9 @@ const loginController = async (req:Request,res:Response) => {
         res.status(200).json({
             _id: user._id,
             username: user.username,
-            email: user.email
+            email: user.email,
+            phoneNumber: user.phoneNumber,
+            shippingAddress:user.shippingAddress
         })
 
     } else {
@@ -84,40 +88,29 @@ const logoutController = async (req:Request,res:Response) => {
     }
 }
 
-interface User {
-    _id: string,
-    username: string,
-    email: string,
-    password: string
-}
-
-declare global {
-    namespace Express {
-      interface Request {
-        user: User | '';
-        updateUser: User | ''
-      }
-    }
-  }
 
 const updateController = async (req:Request,res:Response) => {
     try {
-        const user = req.user
         if(req.body.password) {
             const salt = await bcrypt.genSalt(10)
             req.body.password  = await bcrypt.hash(req.body.password,salt)
         }
 
-        const updateUser = await UserModel.findByIdAndUpdate(user._id,{
+        const updateUser:any = await UserModel.findByIdAndUpdate(req.user._id,{
             $set: {
                 username: req.body.username,
                 email: req.body.email,
-                password: req.body.password
+                password: req.body.password,
+                phoneNumber: req.body.phonenumber,
+                shippingAddress: req.body.shippingAddress
             } 
         }, {new: true})
-
-        const {password , ...rest} = updateUser
-        res.status(200).json(rest)
+        res.status(200).json({
+            _id: updateUser._id,
+            email: updateUser.email,
+            phoneNumber: updateUser.phoneNumber,
+            shippingAddress: updateUser.shippingAddress 
+        })
     } catch(err) {
         res.status(400).json('error in updating user')
     }

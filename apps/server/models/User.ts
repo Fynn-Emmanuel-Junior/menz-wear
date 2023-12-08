@@ -1,12 +1,6 @@
 import {Schema,model} from 'mongoose'
 
-interface IUser {
-    username: string,
-    email: string,
-    password: string
-}
-
-const userSchema = new Schema<IUser>({
+const userSchema = new Schema({
     username: {
         type: String,
         required: true
@@ -19,8 +13,14 @@ const userSchema = new Schema<IUser>({
         type: String,
         required: true
     },
+    phoneNumber: {
+        type: Number
+    },
+    shippingAddress: {
+        type: String
+    }
 },{timestamps: true})
 
-const UserModel = model<IUser>('User', userSchema)
+const UserModel = model('User', userSchema)
 
 export default UserModel

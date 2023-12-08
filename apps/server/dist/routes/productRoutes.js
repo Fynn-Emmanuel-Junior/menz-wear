@@ -7,7 +7,7 @@ const ProductController_1 = require("./../controllers/ProductController");
 const express_1 = __importDefault(require("express"));
 const AdminAuthMiddleware_1 = require("../middlewares/AdminAuthMiddleware");
 const router = express_1.default.Router();
-router.post('/create', ProductController_1.createProduct);
+router.post('/create', AdminAuthMiddleware_1.AdminAuthMiddleware, ProductController_1.AddProduct);
 router.get('/', AdminAuthMiddleware_1.AdminAuthMiddleware, ProductController_1.getAllProducts);
 router.post('/update:id', AdminAuthMiddleware_1.AdminAuthMiddleware, ProductController_1.updateProduct);
 router.delete('/delete:id', AdminAuthMiddleware_1.AdminAuthMiddleware, ProductController_1.deleteProduct);
