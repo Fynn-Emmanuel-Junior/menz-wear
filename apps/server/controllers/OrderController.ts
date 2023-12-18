@@ -12,3 +12,17 @@ export const addOrder = async(req:Request,res:Response) => {
         }
     }
 }
+
+export const getOrder = async(req:Request,res:Response) => {
+    try {
+        const order = await OrderModel.findById(req.params.id)
+        if(order) {
+            res.status(200).json(order)
+        } else {
+            res.status(404).json('No order found')
+        }
+        
+    } catch(err: unknown) {
+        if(err instanceof Error) return res.status(400).json({message: err.message})
+    }
+}
