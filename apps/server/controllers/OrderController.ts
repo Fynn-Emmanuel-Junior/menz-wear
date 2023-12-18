@@ -13,6 +13,15 @@ export const addOrder = async(req:Request,res:Response) => {
     }
 }
 
+export const getAllOrders = async(req:Request,res:Response) => {
+    try {
+        const allOrders = await OrderModel.find()
+        res.status(400).json(allOrders)
+    } catch(err: unknown) {
+        if(err instanceof Error) return res.status(400).json({message: err.message})
+    }
+}
+
 export const getOrder = async(req:Request,res:Response) => {
     try {
         const order = await OrderModel.findById(req.params.id)
