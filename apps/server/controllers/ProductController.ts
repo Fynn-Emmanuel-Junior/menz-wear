@@ -81,16 +81,14 @@ export const deleteProduct = async (req: Request, res: Response) => {
     }
 }
 
-export const getCategoryProducts = async (req:Request,res:Response) => {    
+export const searchProduct = async (req:Request,res:Response) => {
     try {
-        const products = await ProductModel.find({category: req.params.id})
-        res.status(200).json(products)
+        const product = await ProductModel.find({
+            name: {$regex: req.query.name,$options: 'i'}
+        })
+
+        res.status(200).json(product)
     } catch(err: unknown) {
-        if(err instanceof Error) {
-            res.status(404).json({
-                status: false,
-                message: err.message
-            })
-        }
+        if(err instanceof Error) return res.status(400).json({message: err.message})
     }
 }

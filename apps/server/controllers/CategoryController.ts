@@ -26,8 +26,6 @@ export const getAllCategory = async (req:Request,res:Response) => {
     }
 }
 
-
-
 export const updateCategory = async (req:Request, res:Response) => {
     try {
             const category = await CategoryModel.findById(req.params.id)
@@ -51,7 +49,6 @@ export const updateCategory = async (req:Request, res:Response) => {
     }
 }
 
-
 export const deleteCategory = async (req:Request,res:Response) => {
     try {
         await CategoryModel.deleteOne({category: req.params.id})
@@ -64,6 +61,20 @@ export const deleteCategory = async (req:Request,res:Response) => {
         }
     }
 } 
+
+export const getCategoryProducts = async (req:Request,res:Response) => {    
+    try {
+        const products = await ProductModel.findById({category: req.params.id})
+        res.status(200).json(products)
+    } catch(err: unknown) {
+        if(err instanceof Error) {
+            res.status(404).json({
+                status: false,
+                message: err.message
+            })
+        }
+    }
+}
 
 export const searchCategory = async(req:Request, res: Response) => {
     try {
