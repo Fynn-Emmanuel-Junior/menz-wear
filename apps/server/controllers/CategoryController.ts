@@ -55,7 +55,7 @@ export const updateCategory = async (req:Request, res:Response) => {
 export const deleteCategory = async (req:Request,res:Response) => {
     try {
         await CategoryModel.deleteOne({category: req.params.id})
-        await ProductModel.findOneAndDelete({ category: req.params.id })
+        await ProductModel.deleteMany({ category: req.params.id })
 
         res.status(200).json('category deleted')
     } catch(err : unknown) {
@@ -66,5 +66,13 @@ export const deleteCategory = async (req:Request,res:Response) => {
 } 
 
 export const searchCategory = async(req:Request, res: Response) => {
-    
+    try {
+        const searchCategory = await CategoryModel.find({
+           name: { $regex: req.query.category,$options: 'i'}
+        })
+
+        res.status(200).json(searchCategory)
+    } catch(err: unknown) {
+        if(err instanceof Error) return res.status(400).json({message: err.message})
+    }
 }
