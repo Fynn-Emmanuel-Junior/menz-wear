@@ -1,11 +1,13 @@
 import mongoose from 'mongoose'
+import { nanoid} from 'nanoid'
 
 const orderSchema = new mongoose.Schema({
-    userRef: {
+    orderId: nanoid(),
+    customerName: {
         type: String,
         required: true
     },
-    productname: {
+    productName: {
         type: String,
         required: true
     },

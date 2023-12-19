@@ -2,7 +2,7 @@ import OrderModel from '../models/Order'
 import { Request,Response } from 'express'
 
 
-export const addOrder = async(req:Request,res:Response) => {
+export const placeOrder = async(req:Request,res:Response) => {
     try {
         const order = await OrderModel.create(req.body)
         res.status(200).json(order)
@@ -33,5 +33,30 @@ export const getOrder = async(req:Request,res:Response) => {
         
     } catch(err: unknown) {
         if(err instanceof Error) return res.status(400).json({message: err.message})
+    }
+}
+
+export const recentOrders = async (req:Request,res:Response) => {
+    try {
+        const recentOrders = await OrderModel.find().sort({createdAt: -1}).limit(6).exec()
+        res.status(200).json(recentOrders)
+    }  catch(err: unknown) {
+        if(err instanceof Error) return res.status(500).json({message: err.message})
+    } 
+}
+
+export const searchOrder = async (req:Request,res:Response) => {
+    try {
+            const searchResult = await OrderModel.find({
+                $or: [
+                    {orderId : req.query.orderId},
+                    {customerName: {$regex: req.query.customerName, $options: 'i'}}
+                ]
+            })
+
+            res.status(200).json(searchResult)
+
+    } catch(err: unknown) {
+        if(err instanceof Error) return res.status(500).json({message: err.message})
     }
 }

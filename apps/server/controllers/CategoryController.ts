@@ -64,3 +64,7 @@ export const deleteCategory = async (req:Request,res:Response) => {
         }
     }
 } 
+
+export const searchCategory = async(req:Request, res: Response) => {
+    
+}
