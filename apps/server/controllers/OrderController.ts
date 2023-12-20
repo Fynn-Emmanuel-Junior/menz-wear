@@ -36,6 +36,14 @@ export const getOrder = async(req:Request,res:Response) => {
     }
 }
 
+export const deleteOrder = async(req:Request, res:Response) => {
+    try {
+        
+    } catch(err: unknown) {
+        if(err instanceof Error) return res.status(400).json({message: err.message})
+    }
+}
+
 export const recentOrders = async (req:Request,res:Response) => {
     try {
         const recentOrders = await OrderModel.find().sort({createdAt: -1}).limit(6).exec()

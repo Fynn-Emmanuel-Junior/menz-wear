@@ -1,3 +1,4 @@
+import { required } from 'joi'
 import mongoose from 'mongoose'
 import { nanoid} from 'nanoid'
 
@@ -6,6 +7,9 @@ const orderSchema = new mongoose.Schema({
     customerName: {
         type: String,
         required: true
+    },
+    color: {
+        type: String
     },
     productName: {
         type: String,
