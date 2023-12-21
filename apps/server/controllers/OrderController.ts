@@ -4,7 +4,15 @@ import { Request,Response } from 'express'
 
 export const placeOrder = async(req:Request,res:Response) => {
     try {
-        const order = await OrderModel.create(req.body)
+        const order = await OrderModel.create({
+            orderId: Math.floor(Math.random() * 6),
+            customerName: req.body.customerName,
+            productName: req.body.productName,
+            shippingAddress: req.body.shippingAddress,
+            amount: req.body.amount,
+            qunatity: req.body.quantity,
+            status: req.body.status
+        })
         res.status(200).json(order)
     } catch(err: unknown) {
         if(err instanceof Error) {

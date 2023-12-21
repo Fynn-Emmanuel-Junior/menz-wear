@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getCategoryProducts = exports.deleteProduct = exports.getProduct = exports.getAllProducts = exports.updateProduct = exports.AddProduct = void 0;
+exports.searchProduct = exports.deleteProduct = exports.getProduct = exports.getAllProducts = exports.updateProduct = exports.AddProduct = void 0;
 const Product_1 = __importDefault(require("../models/Product"));
 const AddProduct = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
@@ -92,18 +92,16 @@ const deleteProduct = (req, res) => __awaiter(void 0, void 0, void 0, function* 
     }
 });
 exports.deleteProduct = deleteProduct;
-const getCategoryProducts = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+const searchProduct = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const products = yield Product_1.default.find({ category: req.params.id });
-        res.status(200).json(products);
+        const product = yield Product_1.default.find({
+            name: { $regex: req.query.name, $options: 'i' }
+        });
+        res.status(200).json(product);
     }
     catch (err) {
-        if (err instanceof Error) {
-            res.status(404).json({
-                status: false,
-                message: err.message
-            });
-        }
+        if (err instanceof Error)
+            return res.status(400).json({ message: err.message });
     }
 });
-exports.getCategoryProducts = getCategoryProducts;
+exports.searchProduct = searchProduct;

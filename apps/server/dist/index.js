@@ -21,6 +21,9 @@ const dotenv_1 = __importDefault(require("dotenv"));
 dotenv_1.default.config();
 const usersRoutes_1 = __importDefault(require("./routes/usersRoutes"));
 const productRoutes_1 = __importDefault(require("./routes/productRoutes"));
+const orderRoutes_1 = __importDefault(require("./routes/orderRoutes"));
+const adminRoutes_1 = __importDefault(require("./routes/adminRoutes"));
+const categoryRoutes_1 = __importDefault(require("./routes/categoryRoutes"));
 const database = process.env.DATABASE_URI;
 //ENV 
 exports.ACCESS_TOKEN_SECRET = process.env.ACCESS_TOKEN_SECRET;
@@ -35,6 +38,9 @@ app.use((0, cookie_parser_1.default)());
 //Routes
 app.use('/users', usersRoutes_1.default);
 app.use('/products', productRoutes_1.default);
+app.use('orders', orderRoutes_1.default);
+app.use('/admin', adminRoutes_1.default);
+app.use('/category', categoryRoutes_1.default);
 app.listen(PORT, () => __awaiter(void 0, void 0, void 0, function* () {
     yield mongoose_1.default.connect(database)
         .then(() => console.log(`server running on port ${PORT}`))

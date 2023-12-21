@@ -11,4 +11,6 @@ router.post('/craete', AdminAuthMiddleware_1.AdminAuthMiddleware, CategoryContro
 router.get('/', AdminAuthMiddleware_1.AdminAuthMiddleware, CategoryController_1.getAllCategory);
 router.put('/update:id', AdminAuthMiddleware_1.AdminAuthMiddleware, CategoryController_1.updateCategory);
 router.delete('/delete:id', AdminAuthMiddleware_1.AdminAuthMiddleware, CategoryController_1.deleteCategory);
+router.get('/search-category', AdminAuthMiddleware_1.AdminAuthMiddleware, CategoryController_1.searchCategory);
+router.get('/category-products:id', AdminAuthMiddleware_1.AdminAuthMiddleware, CategoryController_1.getCategoryProducts);
 exports.default = router;

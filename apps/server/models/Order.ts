@@ -1,15 +1,13 @@
-import { required } from 'joi'
 import mongoose from 'mongoose'
-import { nanoid} from 'nanoid'
 
 const orderSchema = new mongoose.Schema({
-    orderId: nanoid(),
-    customerName: {
+    orderId:  {
         type: String,
         required: true
     },
-    color: {
-        type: String
+    customerName: {
+        type: String,
+        required: true
     },
     productName: {
         type: String,

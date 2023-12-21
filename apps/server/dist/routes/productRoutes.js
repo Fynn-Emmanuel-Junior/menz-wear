@@ -11,5 +11,4 @@ router.post('/create', AdminAuthMiddleware_1.AdminAuthMiddleware, ProductControl
 router.get('/', AdminAuthMiddleware_1.AdminAuthMiddleware, ProductController_1.getAllProducts);
 router.post('/update:id', AdminAuthMiddleware_1.AdminAuthMiddleware, ProductController_1.updateProduct);
 router.delete('/delete:id', AdminAuthMiddleware_1.AdminAuthMiddleware, ProductController_1.deleteProduct);
-router.get('/category-products:id', AdminAuthMiddleware_1.AdminAuthMiddleware, ProductController_1.getCategoryProducts);
 exports.default = router;

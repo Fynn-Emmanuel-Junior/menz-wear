@@ -12,11 +12,19 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.addOrder = void 0;
+exports.searchOrder = exports.recentOrders = exports.deleteOrder = exports.getOrder = exports.getAllOrders = exports.placeOrder = void 0;
 const Order_1 = __importDefault(require("../models/Order"));
-const addOrder = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+const placeOrder = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const order = yield Order_1.default.create(req.body);
+        const order = yield Order_1.default.create({
+            orderId: Math.floor(Math.random() * 6),
+            customerName: req.body.customerName,
+            productName: req.body.productName,
+            shippingAddress: req.body.shippingAddress,
+            amount: req.body.amount,
+            qunatity: req.body.quantity,
+            status: req.body.status
+        });
         res.status(200).json(order);
     }
     catch (err) {
@@ -25,4 +33,67 @@ const addOrder = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         }
     }
 });
-exports.addOrder = addOrder;
+exports.placeOrder = placeOrder;
+const getAllOrders = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const allOrders = yield Order_1.default.find();
+        res.status(400).json(allOrders);
+    }
+    catch (err) {
+        if (err instanceof Error)
+            return res.status(400).json({ message: err.message });
+    }
+});
+exports.getAllOrders = getAllOrders;
+const getOrder = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const order = yield Order_1.default.findById(req.params.id);
+        if (order) {
+            res.status(200).json(order);
+        }
+        else {
+            res.status(404).json('No order found');
+        }
+    }
+    catch (err) {
+        if (err instanceof Error)
+            return res.status(400).json({ message: err.message });
+    }
+});
+exports.getOrder = getOrder;
+const deleteOrder = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+    }
+    catch (err) {
+        if (err instanceof Error)
+            return res.status(400).json({ message: err.message });
+    }
+});
+exports.deleteOrder = deleteOrder;
+const recentOrders = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const recentOrders = yield Order_1.default.find().sort({ createdAt: -1 }).limit(6).exec();
+        res.status(200).json(recentOrders);
+    }
+    catch (err) {
+        if (err instanceof Error)
+            return res.status(500).json({ message: err.message });
+    }
+});
+exports.recentOrders = recentOrders;
+const searchOrder = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const searchResult = yield Order_1.default.find({
+            $or: [
+                { orderId: req.query.orderId },
+                { customerName: { $regex: req.query.customerName, $options: 'i' } }
+            ]
+        });
+        res.status(200).json(searchResult);
+    }
+    catch (err) {
+        if (err instanceof Error)
+            return res.status(500).json({ message: err.message });
+    }
+});
+exports.searchOrder = searchOrder;

@@ -5,11 +5,15 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose_1 = __importDefault(require("mongoose"));
 const orderSchema = new mongoose_1.default.Schema({
-    userRef: {
+    orderId: {
         type: String,
         required: true
     },
-    productname: {
+    customerName: {
+        type: String,
+        required: true
+    },
+    productName: {
         type: String,
         required: true
     },
@@ -26,7 +30,8 @@ const orderSchema = new mongoose_1.default.Schema({
         required: true
     },
     status: {
-        type: String
+        type: 'Pending',
+        required: true
     }
 }, { timestamps: true });
 const OrderModel = mongoose_1.default.model('OrderModel', orderSchema);
