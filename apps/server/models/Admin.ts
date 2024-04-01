@@ -1,7 +1,7 @@
-import { Schema,model } from 'mongoose';
+import mongoose from "mongoose"
 
 
-const AdminSchema = new Schema({
+const AdminSchema = new mongoose.Schema({
     email: {
         type: String,
         required: true,
@@ -12,6 +12,6 @@ const AdminSchema = new Schema({
     }
 }, {timestamps: true})
 
- const AdminModel = model<IAdmin>('Admin',AdminSchema)
+ const AdminModel = mongoose.model('Admin',AdminSchema)
 
  export default AdminModel

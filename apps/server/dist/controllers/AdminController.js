@@ -12,36 +12,12 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.updateController = exports.logoutController = exports.loginController = exports.registerController = void 0;
+exports.updateController = exports.logoutController = exports.loginController = void 0;
 const AdminValidations_1 = require("./../validations/AdminValidations");
 const Admin_1 = __importDefault(require("../models/Admin"));
 const bcryptjs_1 = __importDefault(require("bcryptjs"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const index_1 = require("../index");
-const registerController = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { error } = (0, AdminValidations_1.AdminSignupValidation)(req.body);
-    if (error)
-        return res.status(400).json({ message: `error in creating Admin: ${error.message}` });
-    const { username, email, password } = req.body;
-    const checkIfEmailExists = yield Admin_1.default.findOne({ email });
-    if (checkIfEmailExists)
-        return res.status(409).json('Admin already exists');
-    const salt = yield bcryptjs_1.default.genSalt(10);
-    const hashedpassword = yield bcryptjs_1.default.hash(password, salt);
-    try {
-        const newAdmin = yield Admin_1.default.create({
-            username: username,
-            email: email,
-            password: hashedpassword,
-        });
-        res.status(200).json('Admin created');
-    }
-    catch (err) {
-        if (err instanceof Error)
-            return res.status(400).json({ message: err.message });
-    }
-});
-exports.registerController = registerController;
 const loginController = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { error } = (0, AdminValidations_1.AdminLoginValidation)(req.body);
     if (error)
