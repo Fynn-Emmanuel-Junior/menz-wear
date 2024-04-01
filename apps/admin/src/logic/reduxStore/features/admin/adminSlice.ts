@@ -7,6 +7,8 @@ type InitialState = {
 }
 
 type Data = {
+    email: string,
+    password: string
 
 }
 
@@ -17,19 +19,27 @@ const initialState:InitialState  = {
     error: ''
 }
 
-export const signupAdmin = createAsyncThunk('signupAdmin', async(data:Data) => {
+export const LoginAdmin = createAsyncThunk('signupAdmin', async(formdata:Data) => {
     try {
-        const res = await fetch('')
-    } catch (err) {
+        const res = await fetch('http://localhost:3500/admin/login', {
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(formdata)
+        })
+
+        const data = await res.json()
+        console.log('admin login succesfull')
+
+    } catch (err: unknown) {
+        if(err instanceof Error) {
+            console.log('cannot login admin')
+        }
 
     }
 })
 
-export const loginAdmin = createAsyncThunk('loginAdmin', async(data:Data) => {
-    try {
-
-    } catch (err) {}
-})
 
 const adminSlice = createSlice({
     name: 'admin',
@@ -37,7 +47,18 @@ const adminSlice = createSlice({
     reducers: {},
 
     extraReducers: (builder) => {
-
+        builder
+        .addCase(LoginAdmin.pending , (state) => {
+            state.loading = true
+        })
+        .addCase(LoginAdmin.fulfilled, (state, action) => {
+            state.loading = false;
+            state.admin = action.payload;
+          })
+          .addCase(LoginAdmin.rejected, (state, action) => {
+            state.loading = false;
+            state.error = action.error.message;
+          });
     }
 })
 
