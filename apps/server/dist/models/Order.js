@@ -28,10 +28,6 @@ const orderSchema = new mongoose_1.default.Schema({
     quantity: {
         type: Number,
         required: true
-    },
-    status: {
-        type: 'Pending',
-        required: true
     }
 }, { timestamps: true });
 const OrderModel = mongoose_1.default.model('OrderModel', orderSchema);

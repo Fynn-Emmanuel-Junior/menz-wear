@@ -1,17 +1,7 @@
 import { Schema,model } from 'mongoose';
 
 
-interface IAdmin {
-    username: string,
-    email: string,
-    password: string
-}
-
-const AdminSchema = new Schema<IAdmin>({
-    username: {
-        type: String,
-        required: true,
-    },
+const AdminSchema = new Schema({
     email: {
         type: String,
         required: true,

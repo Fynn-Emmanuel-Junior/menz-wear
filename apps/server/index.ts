@@ -9,6 +9,7 @@ import productsRoutes from './routes/productRoutes'
 import orderRoutes from './routes/orderRoutes'
 import adminRoutes from './routes/adminRoutes'
 import categoryRoutes from './routes/categoryRoutes'
+import { CreateAdmin } from './utils/CreateAdmin'
 
 const database: string = process.env.DATABASE_URI  as string 
 
@@ -37,6 +38,9 @@ app.use('/category',categoryRoutes)
 
 app.listen(PORT, async () => {
     await mongoose.connect(database)
-        .then(() => console.log(`server running on port ${PORT}`))
+        .then(() => {
+            CreateAdmin()
+            console.log(`server running on port ${PORT}`)
+        })
         .catch((err) => console.log(`database connectivity failed: ${err.message}`))
 })
