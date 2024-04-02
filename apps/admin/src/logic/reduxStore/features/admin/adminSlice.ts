@@ -19,7 +19,7 @@ const initialState:InitialState  = {
     error: ''
 }
 
-export const LoginAdmin = createAsyncThunk('signupAdmin', async(formdata:Data) => {
+export const LoginAdmin = createAsyncThunk('loginAdmin', async(formdata:Data) => {
     try {
         const res = await fetch('http://localhost:3500/admin/login', {
             method: "POST",
@@ -30,7 +30,8 @@ export const LoginAdmin = createAsyncThunk('signupAdmin', async(formdata:Data) =
         })
 
         const data = await res.json()
-        console.log('admin login succesfull')
+        console.log('admin login succesful')
+        return data
 
     } catch (err: unknown) {
         if(err instanceof Error) {
