@@ -5,10 +5,10 @@ import { useState } from 'react'
 import { FaRegEyeSlash } from "react-icons/fa";
 import { FaRegEye } from "react-icons/fa6";
 import { useRouter } from 'next/navigation';
-import { useDispatch } from 'react-redux';
 import { Circles } from 'react-loader-spinner'
 import { LoginAdmin } from '@/logic/reduxStore/features/admin/adminSlice';
 import { useAppDispatch,useAppSelector } from '@/logic/reduxStore/app/hooks';
+import { selectAdmin } from '@/logic/reduxStore/features/admin/adminSlice';
 
  function Home() {
     const [formdata,setFormdata] = useState({
@@ -17,6 +17,7 @@ import { useAppDispatch,useAppSelector } from '@/logic/reduxStore/app/hooks';
     })
 
     const dispatch = useAppDispatch()
+    const admin = useAppSelector(selectAdmin)
 
 
     const [error,setError] = useState('')
@@ -41,7 +42,17 @@ import { useAppDispatch,useAppSelector } from '@/logic/reduxStore/app/hooks';
         console.log('loading...')
 
 		if(formdata.email && formdata.password) {
+            dispatch(LoginAdmin(formdata))
+            console.log(admin)
+            
+            if(admin._id) {
 
+                router.push('/dashboard')
+            } else if(admin.message == 'Admin not found') {
+                setError('Invalid email or password')
+                setText(false)
+                return ;
+            }
 
 		} else {
 			setError('please fill credentials')

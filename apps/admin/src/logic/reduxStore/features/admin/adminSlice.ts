@@ -1,27 +1,15 @@
 import { createSlice,createAsyncThunk,PayloadAction } from "@reduxjs/toolkit";
 
-type InitialState = { 
-    admin: {}
-    loading: boolean
-    error: string
-}
 
-type Data = {
-    email: string,
-    password: string
-
-}
-
-
-const initialState:InitialState  = {
+const initialState  = {
     admin: {},
     loading: false,
     error: ''
 }
 
-export const LoginAdmin = createAsyncThunk('loginAdmin', async(formdata:Data) => {
+export const LoginAdmin = createAsyncThunk('loginAdmin', async(formdata: any) => {
     try {
-        const res = await fetch('http://localhost:3500/admin/login', {
+        const response = await fetch('http://localhost:3500/admin/login', {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json'
@@ -29,9 +17,7 @@ export const LoginAdmin = createAsyncThunk('loginAdmin', async(formdata:Data) =>
             body: JSON.stringify(formdata)
         })
 
-        const data = await res.json()
-        console.log('admin login succesful')
-        return data
+        return response;
 
     } catch (err: unknown) {
         if(err instanceof Error) {
@@ -54,13 +40,15 @@ const adminSlice = createSlice({
         })
         .addCase(LoginAdmin.fulfilled, (state, action) => {
             state.loading = false;
-            state.admin = action.payload;
+            state.admin = action.payload as any
           })
           .addCase(LoginAdmin.rejected, (state, action) => {
             state.loading = false;
-            state.error = action.error.message;
+            state.error = action.error.message as any
           });
     }
 })
+
+export const selectAdmin = (state: any) => state.admin.admin
 
 export default adminSlice.reducer
